@@ -7,7 +7,8 @@
    set kernel_options collision(player1,playfield)
    set smartbranching on   
    set tv ntsc
-   ;Designed by tazrog copyright 2023
+   
+;Designed by tazrog copyright 2023
    ;  NTSC colors.
    const font = retroputer  
    const _00 = $00
