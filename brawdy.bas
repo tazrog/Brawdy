@@ -299,9 +299,6 @@ __Main_Loop
    if Househit=11 then gosub __PFColors9 bank3
    if Househit=12 then gosub __PFColors10 bank3
    if Househit>12 then gosub __GameOver bank4 
-  ; if level = $3 then EnemySpeed = 4
-  ; if level >= $4 then EnemySpeed =5
-  ; if level > $5 then EnemySpeed =6   
    if EnemyHit > 0 then Bit1_missleOn{1} = 0: missile0y=200    
    pfpixel 12 1 on
    pfpixel 13 1 on
@@ -322,12 +319,12 @@ __Movement
    Moverate=Moverate +1       
    
 __HealthDrop
-   if HealthDrop > 4 && !Bit2_EnemyMove{2} then if player4y > 190 then player4y = 5:player4x = (rand+44)/2 : Bit2_EnemyMove{2}=1
-   if HealthDrop > 4 && player4y >190 then Bit2_EnemyMove{2}=0
+     if HealthDrop > 4 && !Bit2_EnemyMove{2} then if player4y > 190 then player4y = 5:player4x = (rand+44)/2 : Bit2_EnemyMove{2}=1
+     if HealthDrop > 4 && player4y >190 then Bit2_EnemyMove{2}=0
    if Bit2_EnemyMove{2} && player4y>170 then HealthDrop=0: Bit2_EnemyMove{2}=0 : player4y = 200:
    if player4x < 10 then player4x=10
    if player4x > 148 then player4x =148
-   if player4y < 30  && player4y >= player1y -25 && player4y <= player1y+25 then goto __Player1Move :Moverate=Moverate-1 
+   
    if Moverate < 7 then goto __Player1Move
    scorecolor=scorecolor+1
    if Bit2_EnemyMove{2} then player4y = player4y +2 : HealthDrop = 0
@@ -335,7 +332,7 @@ __HealthDrop
 __Player1Move
    if drop >= 48 && player1y = 200 then goto __Player2Move
    if player1y >190 && EnemyHit <> 1 then player1y = (rand&5)+5: player1x = (rand+20)/2: HealthDrop=HealthDrop +1 :  drop = drop +1   
-   if player1y >= 164 then goto __Player1SideMove   
+   if player1y >= 164 then goto __Player1SideMove      
    if player1x < 10 then player1x =10
    if player1x > 148 then player1x =148     
    if Moverate < 8 then goto __CheckCollision 
@@ -355,23 +352,24 @@ __Player2Move
    if drop >= 48 && player2y = 200 then goto __Player3Move
    if player2y >170 && EnemyHit <> 2 then player2y =  (rand&5): player2x = (rand+20)/2: drop = drop +1
    if player2x < 15 then player2x = 15
-   if player2x > 148 then player2x =148  
-   if player2y < 30  && player2y >= player4y -20 && player2y <= player4y+20 then goto __Player3Move :Moverate=Moverate-1
-   if player2y < 30  && player2y >= player1y -20 && player2y <= player1y+20 then goto __Player3Move :Moverate=Moverate-1 
-   
+   if player2x > 148 then player2x = 148  
+   if player2y < 20  && player2y >= player4y -30 && player2y <= player4y+30 then goto __Player3Move :Moverate=Moverate-1
+   if player2y < 20  && player2y >= player1y -30 && player2y <= player1y+30 then goto __Player3Move :Moverate=Moverate-1
+   if player2y < 20  && player2y >= player3y -30 && player2y <= player3y+30 then goto __Player3Move :Moverate=Moverate-1  
 __SkipP2drop
    if EnemyHit = 2 then goto __Player3Move
    if Moverate < 8 then goto __CheckCollision
    player2y = player2y + EnemySpeed 
 
 __Player3Move     
-   if drop < 50 then if player3y > 170 && LEdge < 80 then player3y =(rand&40)+10:player3x = 148 : drop = drop +1
-   if drop < 50 then if player3y > 170 && LEdge > 80 then  player3y =(rand&40)+10:player3x = 10 : drop = drop +1
+   if drop < 50 then if player3y > 170 && LEdge < 80 then player3y =(rand&40)+30:player3x = 148 : drop = drop +1
+   if drop < 50 then if player3y > 170 && LEdge > 80 then  player3y =(rand&40)+30:player3x = 10 : drop = drop +1
       
 __SkipP3drop
    if Moverate < 8 then goto __CheckCollision   
    if level > 2 && player3x > LEdge && player3x < REdge then player3y = player3y + 3: goto __SkipHMove
    if EnemyHit = 3 then goto __SkipHMove
+   
    if rand < 179 then if LEdge < 80  then player3x = player3x - EnemySpeed
    if rand < 179 then if LEdge > 80 then player3x = player3x + EnemySpeed
    if player3x > 170 || player3x < 5 then drop =drop +1
@@ -411,10 +409,6 @@ __Skip_PF_Collision
   
 __SkipMove    
 
-   ;***************************************************************
-   ;
-   ;  88 rows that are 2 scanlines high.
-   ;
    DF6FRACINC = 255 ; Background colors.
    DF4FRACINC = 255 ; Playfield colors.
 
