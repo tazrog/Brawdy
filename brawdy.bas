@@ -1,6 +1,4 @@
-   ;****************************************************************
-   ;
-   ;  This program uses the DPC+ kernel.
+    ;This program uses the DPC+ kernel.
    ;;Designed by tazrog copyright 2023
 
    set kernel DPC+
@@ -326,7 +324,7 @@ __HealthDrop
    if player4x > 148 then player4x =148   
    if Moverate < 7 then goto __Player1Move
    scorecolor=scorecolor+1
-    if player4y < 20  && player4y >= player1y -30 && player4y <= player1y+30 then goto __Player1Move
+   if player4y < 20  && player4y >= player1y -30 && player4y <= player1y+30 then goto __Player1Move
    if Bit2_EnemyMove{2} then player4y = player4y +2 : HealthDrop = 0
 
 __Player1Move
@@ -357,9 +355,7 @@ __Player2Move
    if player2x > 148 then player2x = 148  
    if player2y < 20  && player2y >= player4y -30 && player2y <= player4y+30 then goto __Player3Move 
    if player2y < 20  && player2y >= player1y -30 && player2y <= player1y+30 then goto __Player3Move 
-    
-   
-      
+          
 __SkipP2drop
    if EnemyHit = 2 then goto __Player3Move
    if Moverate < 8 then goto __CheckCollision
@@ -388,7 +384,6 @@ __Player3xMove
    if !Bit7_PLayer3Moving{7} then player3x = player3x + EnemySpeed    
    if Bit7_PLayer3Moving{7} then player3x = player3x - EnemySpeed 
        
-
 __Player3Reset
    if player3x > 150 || player3x < 5 then drop =drop +1
    if player3x > 150 || player3x < 5 then player3y =200: Bit6_PLayer3Direction(6) = 0 
@@ -443,14 +438,12 @@ __JoystickControls
 __FireSound  
    if joy0fire && !Bit4_gameover{4} then if !Ch0_Sound  && !Bit1_missleOn{1} then Ch0_Sound = 1 : Ch0_Duration = 15 
    if !Ch0_Sound then goto __Skip_Ch_0  
-    
    Ch0_Duration = Ch0_Duration - 1  
    if !Ch0_Duration then goto __Clear_Ch_0  
    if Ch0_Sound <> 1  then goto __Skip_Ch0_Sound_001
    AUDC0 = 8 : AUDV0 = 2 : AUDF0 = 4   
    if Ch0_Duration < 10 then AUDC0 = 6 : AUDV0 = 2 : AUDF0 = 12
    if Ch0_Duration < 5 then AUDC0 = 6 : AUDV0 = 1 : AUDF0 = 14
-   
    goto __Skip_Ch_0
 __Skip_Ch0_Sound_001 
    goto __Skip_Ch_0
@@ -714,7 +707,6 @@ _PlayfieldLevel1
 end
   
    goto __Colors
-
 
 __Colors
     pfcolors:
