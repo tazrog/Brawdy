@@ -326,6 +326,7 @@ __HealthDrop
    if player4x > 148 then player4x =148   
    if Moverate < 7 then goto __Player1Move
    scorecolor=scorecolor+1
+    if player4y < 20  && player4y >= player1y -30 && player4y <= player1y+30 then goto __Player1Move
    if Bit2_EnemyMove{2} then player4y = player4y +2 : HealthDrop = 0
 
 __Player1Move
@@ -356,6 +357,8 @@ __Player2Move
    if player2x > 148 then player2x = 148  
    if player2y < 20  && player2y >= player4y -30 && player2y <= player4y+30 then goto __Player3Move 
    if player2y < 20  && player2y >= player1y -30 && player2y <= player1y+30 then goto __Player3Move 
+    
+   
       
 __SkipP2drop
    if EnemyHit = 2 then goto __Player3Move
@@ -367,7 +370,7 @@ __Player3Move
 __SkipP3drop
    if Moverate < 5 then goto __CheckCollision 
    if player3y > 120 then  __Player3Xset
-   if level > 0 && player3x > LEdge && player3x < REdge then player3y = player3y + 3: goto __SkipHMove
+   if level > 2 && player3x > LEdge && player3x < REdge then player3y = player3y + 3: goto __SkipHMove
    if EnemyHit = 3 then goto __SkipHMove
    if Bit6_PLayer3Direction{6} then goto __Player3xMove
 
@@ -387,8 +390,10 @@ __Player3xMove
        
 
 __Player3Reset
-   if player3x > 150 then drop =drop +1 : Bit6_PLayer3Direction(6) = 0
-   if player3x < 5 then drop =drop +1 : Bit6_PLayer3Direction(6) = 0
+   if player3x > 150 || player3x < 5 then drop =drop +1
+   if player3x > 150 || player3x < 5 then player3y =200: Bit6_PLayer3Direction(6) = 0 
+
+   ;if player3x < 5 then drop =drop +1 : Bit6_PLayer3Direction(6) = 0 : player3y =200
 __SkipHMove
    Moverate=0   
 
