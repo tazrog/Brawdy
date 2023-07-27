@@ -365,17 +365,17 @@ __SkipP2drop
 __Player3Move    
       
 __SkipP3drop
-   if Moverate < 5 then goto __CheckCollision   
-   if level > 2 && player3x > LEdge && player3x < REdge then player3y = player3y + 3: goto __SkipHMove
+   if Moverate < 5 then goto __CheckCollision 
+   if player3y > 120 then  __Player3Xset
+   if level > 0 && player3x > LEdge && player3x < REdge then player3y = player3y + 3: goto __SkipHMove
    if EnemyHit = 3 then goto __SkipHMove
-
    if Bit6_PLayer3Direction{6} then goto __Player3xMove
 
+__Player3Xset
    if (rand&1) >0 then Bit7_PLayer3Moving{7} =1 else Bit7_PLayer3Moving{7} =0 
-
    if drop > 49 then goto __Player3Reset
-   if Bit7_PLayer3Moving{7} && !Bit6_PLayer3Direction{6} then player3y =(rand&40)+30:player3x = 150 : drop = drop +1
-   if !Bit7_PLayer3Moving{7} && !Bit6_PLayer3Direction{6} then player3y =(rand&40)+30:player3x = 7 : drop = drop +1 
+   if Bit7_PLayer3Moving{7} then player3y =(rand&40)+30:player3x = 150 : drop = drop +1
+   if !Bit7_PLayer3Moving{7} then player3y =(rand&40)+30:player3x = 7 : drop = drop +1 
    Bit6_PLayer3Direction{6} =1  
 
 __Player3xMove
@@ -383,11 +383,12 @@ __Player3xMove
    if player3y >= player2y -10 && player3y <= player2y+10 && player3x >= player2x -20 && player3x <= player2x+20 then goto __Player3Reset :Moverate=Moverate-1
    if player3y >= player4y -5 && player3y <= player4y+5 && player3x >= player4x && player3x <= player4x then player4x=200
    if !Bit7_PLayer3Moving{7} then player3x = player3x + EnemySpeed    
-   if Bit7_PLayer3Moving{7} then player3x = player3x - EnemySpeed     
+   if Bit7_PLayer3Moving{7} then player3x = player3x - EnemySpeed 
+       
 
 __Player3Reset
-   if player3x > 150 then drop =drop +1: Bit6_PLayer3Direction(6) = 0
-   if player3x < 5 then drop =drop +1: Bit6_PLayer3Direction(6) = 0
+   if player3x > 150 then drop =drop +1 : Bit6_PLayer3Direction(6) = 0
+   if player3x < 5 then drop =drop +1 : Bit6_PLayer3Direction(6) = 0
 __SkipHMove
    Moverate=0   
 
@@ -398,7 +399,7 @@ __CheckCollision
    if !collision(player1,playfield) then goto __EnemyCollision
    if (temp4 + 5) >= player1y && temp4 <= (player1y + 5) then player1y=200 : Househit=Househit+1 : Bit5_hit{5} =1 : goto __Explosion
    if (temp4 + 5) >= player2y && temp4 <= (player2y + 5) then player2y=200 : Househit=Househit+1 : Bit5_hit{5} =1 : goto __Explosion
-   if (temp4 + 5) >= player3y && temp4 <= (player3y + 5) then player3y=200 : Househit=Househit+1 : Bit5_hit{5} =1 : Bit6_PLayer3Direction{6} =0: goto __Explosion
+   if (temp4 + 5) >= player3y && temp4 <= (player3y + 5) then player3y=200 : Bit6_PLayer3Direction(6) = 0 : Househit=Househit+1 : Bit5_hit{5} =1 : goto __Explosion
    if (temp4 + 5) >= player4y && temp4 <= (player4y + 5) then player4y=200 : HealthDrop=0: Bit2_EnemyMove{2}=0
        
 __EnemyCollision    
@@ -425,7 +426,6 @@ __SkipMove
 
    DF6FRACINC = 255 ; Background colors.
    DF4FRACINC = 255 ; Playfield colors.
-
    DF0FRACINC = 128 ; Column 0.
    DF1FRACINC = 128 ; Column 1.
    DF2FRACINC = 128 ; Column 2.
@@ -434,7 +434,6 @@ __SkipMove
 __JoystickControls 
    if joy0left && player0x > _P_Edge_Left then player0x = player0x - 1 
    if joy0right && player0x < _P_Edge_Right then player0x = player0x + 1    
-   
 
 __FireSound  
    if joy0fire && !Bit4_gameover{4} then if !Ch0_Sound  && !Bit1_missleOn{1} then Ch0_Sound = 1 : Ch0_Duration = 15 
@@ -454,6 +453,7 @@ __Clear_Ch_0
    Ch0_Sound = 0 : AUDV0 = 0
 __Skip_Ch_0
    if !Bit4_gameover{4} then if joy0fire  && !Bit1_missleOn{1} then if EnemyHit < 1 then Bit1_missleOn{1} = 1 : missile0x = player0x + 5: missile0y = player0y 
+
 __Explosion
    if Bit5_hit{5} && !Ch1_Sound then Ch1_Sound = 1 : Ch1_Duration = 30 
    if !Ch1_Sound then goto __Skip_Fire  
@@ -489,8 +489,7 @@ __Score
 __EnemyFire      
    if !Bit3_ShootorNot{3} then goto __EnemyShoot 
    if missile1y > 170 then missile1y=200:
-   if level <=5 then if !Bit4_gameover{4} then if Bit3_ShootorNot{3} then missile1y = missile1y + 3
-   
+   if level <=5 then if !Bit4_gameover{4} then if Bit3_ShootorNot{3} then missile1y = missile1y + 3   
    if level >5 then if !Bit4_gameover{4} then if Bit3_ShootorNot{3} then missile1y = missile1y + 5
    if missile1y > 170 then missile1y=200: Bit3_ShootorNot{3}=0
    if collision(missile1, player0) then Points=1 :goto __EnemyScore

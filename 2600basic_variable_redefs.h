@@ -32,9 +32,9 @@ Ch1_Sound = j
  
 V1 = h
  
-LEdge = s
+Bit7_PLayer3Moving = z
  
-REdge = g
+Bit6_PLayer3Direction = z
  
 Bit4_gameover = z
  
@@ -65,6 +65,10 @@ Moverate = b
 drop = a
  
 EnemyHit = i
+ 
+LEdge = 60
+ 
+REdge = 100
  
 SPLIT_KERN_BIT = BIT_7
  
