@@ -317,14 +317,13 @@ __Movement
    Moverate=Moverate +1       
    
 __HealthDrop
-   if HealthDrop > 4 && !Bit2_EnemyMove{2} then if player4y > 190 then player4y = 5:player4x = (rand+44)/2 : Bit2_EnemyMove{2}=1
+   if HealthDrop > 4 && !Bit2_EnemyMove{2} then if player4y > 190 then player4y = 5:player4x = (rand+44)/2 + player1x/2 : Bit2_EnemyMove{2}=1
    if HealthDrop > 4 && player4y >190 then Bit2_EnemyMove{2}=0
    if Bit2_EnemyMove{2} && player4y>170 then HealthDrop=0: Bit2_EnemyMove{2}=0 : player4y = 200:
    if player4x < 10 then player4x=10
    if player4x > 148 then player4x =148   
    if Moverate < 7 then goto __Player1Move
    scorecolor=scorecolor+1
-   if player4y < 20  && player4y >= player1y -30 && player4y <= player1y+30 then goto __Player1Move
    if Bit2_EnemyMove{2} then player4y = player4y +2 : HealthDrop = 0
 
 __Player1Move
@@ -333,7 +332,7 @@ __Player1Move
    if player1y >= 164 then goto __Player1SideMove      
    if player1x < 10 then player1x =10
    if player1x > 148 then player1x =148 
-   if player1y < 20  && player1y >= player4y -30 && player1y <= player4y+30 then goto __Player3Move :Moverate=Moverate-1
+   if player1y < 50  && player1y >= player4y -30 && player1y <= player4y+30 then goto __Player3Move :Moverate=Moverate-1
    ;if player1y < 20  && player1y >= player2y -30 && player1y <= player2y+30 then goto __Player3Move :Moverate=Moverate-1    
    if Moverate < 8 then goto __CheckCollision 
    if EnemyHit = 1 then goto __Player2Move
@@ -353,9 +352,9 @@ __Player2Move
    if player2y >170 && EnemyHit <> 2 then player2y = (rand&5)+5: player2x = (rand+20)/2: drop = drop +1
    if player2x < 15 then player2x = 15
    if player2x > 148 then player2x = 148  
-   if player2y < 20  && player2y >= player4y -30 && player2y <= player4y+30 then goto __Player3Move 
-   if player2y < 20  && player2y >= player1y -30 && player2y <= player1y+30 then goto __Player3Move 
-          
+   if player2y < 50  && player2y >= player4y -30 && player2y <= player4y+30 then goto __Player3Move 
+   if player2y < 50  && player2y >= player1y -30 && player2y <= player1y+30 then goto __Player3Move 
+            
 __SkipP2drop
    if EnemyHit = 2 then goto __Player3Move
    if Moverate < 8 then goto __CheckCollision
@@ -378,8 +377,8 @@ __Player3Xset
    Bit6_PLayer3Direction{6} =1  
 
 __Player3xMove
-   if player3y >= player1y -10 && player3y <= player1y+10 && player3x >= player1x -20 && player3x <= player1x+20 then goto __Player3Reset :Moverate=Moverate-1
-   if player3y >= player2y -10 && player3y <= player2y+10 && player3x >= player2x -20 && player3x <= player2x+20 then goto __Player3Reset :Moverate=Moverate-1
+   if player3y >= player1y -10 && player3y <= player1y+10 && player3x >= player1x -20 && player3x <= player1x+20 then goto __Player3Reset 
+   if player3y >= player2y -10 && player3y <= player2y+10 && player3x >= player2x -20 && player3x <= player2x+20 then goto __Player3Reset 
    if player3y >= player4y -5 && player3y <= player4y+5 && player3x >= player4x && player3x <= player4x then player4x=200
    if !Bit7_PLayer3Moving{7} then player3x = player3x + EnemySpeed    
    if Bit7_PLayer3Moving{7} then player3x = player3x - EnemySpeed 

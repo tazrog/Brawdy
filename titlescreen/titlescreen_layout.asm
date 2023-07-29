@@ -6,19 +6,24 @@
    ; it won't use any rom space.
   
    MAC titlescreenlayout
- draw_96x2_1
-; draw_96x2_2
+  draw_96x2_1
+ ;draw_96x2_2
+   
 ; draw_96x2_3
-; draw_48x1_1
-; draw_48x1_2
+ draw_48x1_1 
+ draw_space 2
+ draw_96x2_2 
+ 
+ draw_96x2_3
+ draw_48x1_2
 ; draw_48x1_3
 ; draw_48x2_1
-; draw_48x2_2
+ ;draw_48x2_2
 ; draw_48x2_3
-; draw_player
+ ;draw_player
 ; draw_gameselect
 ; draw_space 2
-; draw_score
+ ;draw_score
  ENDM
   
    ; minikernel choices are:
