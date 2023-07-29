@@ -197,15 +197,16 @@ __Variables
  
    swdebounce=0
    gamenumber=1
+   level =1
 __titlepage
    delay = delay +1
    if Bit0_NewLevel{0} && delay < 120 then __TitleDelay  
    gosub __Titlesceen bank6     
    if joy0fire || switchreset then goto __Gamestart
-   if !switchselect then swdebounce=0
-   if swdebounce>0  then swdebounce=swdebounce-1: goto __titlepage
-   if switchselect then swdebounce=30: gamenumber=gamenumber+1
-   if gamenumber=21 then gamenumber=1
+   ;if !switchselect then swdebounce=0
+   ;if swdebounce>0  then swdebounce=swdebounce-1: goto __titlepage
+   
+   
 
 __TitleDelay
    goto __titlepage 
@@ -229,6 +230,7 @@ __Gamestart
    Ch1_Duration = 10  
 
 __NextLevel
+   gamenumber=gamenumber+1
    Bit0_NewLevel{0} = 0
    PlayerHealth = 80
    AUDV0 = 0 : AUDV1 = 0

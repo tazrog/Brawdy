@@ -8,32 +8,32 @@ bmp_gameselect_color
  endif
 bmp_gameselect_CHAR0
 
-        .byte %01111010
-        .byte %10001010
-        .byte %10111011
-        .byte %10000010
-        .byte %01111001
+        .byte %11101110 ;
+		.byte %10001000 ;
+		.byte %10001100 ;
+		.byte %10001000 ;
+		.byte %10001110 ;
 
  if >. != >[.+5]
  	align 256
  endif
 bmp_gameselect_CHAR1
 
-        .byte %01010001
-        .byte %01010001
-        .byte %11010101
-        .byte %01011011
-        .byte %10010001
-
+        .byte %01001110 ;
+		.byte %01001000 ;
+		.byte %10101100 ;
+		.byte %10101000 ;
+		.byte %10101110 ;
+		
  if >. != >[.+5]
  	align 256
  endif
 bmp_gameselect_CHAR2
-        .byte %01111000
-        .byte %01000000
-        .byte %01110000
-        .byte %01000000
-        .byte %01111000
+       .byte %11100000 ;
+		.byte %10000000 ;
+		.byte %10000000 ;
+		.byte %10000000 ;
+		.byte %10000000 ;
 
  if >. != >[.+5]
  	align 256
@@ -44,6 +44,12 @@ bmp_gameselect_CHAR3
         .byte %00000000
         .byte %00000000
         .byte %00000000
+
+ if >. != >[.+80]
+ 	align 256
+ endif
+
+
 
  if >. != >[.+80]
  	align 256
