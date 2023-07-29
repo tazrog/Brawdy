@@ -158,8 +158,8 @@ __Variables
    const _P_Edge_Bottom = 160
    const _P_Edge_Left = 0
    const _P_Edge_Right = 150    
-   const splitscore_2_4 = 1
-   const SPLIT_KERN_BIT = BIT_7
+   ;const splitscore_2_4 = 0
+   ;const SPLIT_KERN_BIT = BIT_7
    const REdge =100
    const LEdge = 60
    dim EnemyHit = i  
@@ -194,19 +194,18 @@ __Variables
    dim swdebounce=v   
    dim splitKernelVar = r
    dim PlayerHealth = e
- 
+   
+   Bit0_NewLevel{0}=0
    swdebounce=0
    gamenumber=1
    level =1
 __titlepage
    delay = delay +1
    if Bit0_NewLevel{0} && delay < 120 then __TitleDelay  
-   gosub __Titlesceen bank6     
+   gosub __Titlesceen bank6        
    if joy0fire || switchreset then goto __Gamestart
    ;if !switchselect then swdebounce=0
-   ;if swdebounce>0  then swdebounce=swdebounce-1: goto __titlepage
-   
-   
+   ;if swdebounce>0  then swdebounce=swdebounce-1: goto __titlepage     
 
 __TitleDelay
    goto __titlepage 
@@ -260,8 +259,8 @@ __NextLevel
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 __GameVar
    PlayerHealth = 80
-   ballx = 155
-   bally = 24
+   ;ballx = 155
+   ;bally = 24
    player0x = 75
    player0y = 160
    missile0x = 200 : missile0y = 200
@@ -274,12 +273,13 @@ __GameVar
    CTRLPF=$21
    EnemyHit = 0
    Bit6_PLayer3Direction{6}=0
+
 __Main_Loop
-   ballheight = PlayerHealth
+   ;ballheight = PlayerHealth
    NUSIZ0 = $00
    temp1 = #BIT_7
    splitKernelVar = splitKernelVar | temp1
-   dec sc1= level 
+   ;dec sc1= level 
    delay = delay +1   
    if delay < 60 then __Resume
    if delay > 61 then delay = 71   
@@ -300,16 +300,7 @@ __Main_Loop
    if Househit=12 then gosub __PFColors10 bank3
    if Househit>12 then gosub __GameOver bank4 
    if EnemyHit > 0 then Bit1_missleOn{1} = 0: missile0y=200    
-   pfpixel 12 1 on
-   pfpixel 13 1 on
-   pfpixel 14 1 on
-   pfpixel 15 1 on
-   pfpixel 16 1 on
-   if drop > 10 then pfpixel 16 1 off
-   if drop > 20 then pfpixel 15 1 off
-   if drop > 30 then pfpixel 14 1 off
-   if drop > 40 then pfpixel 13 1 off
-   if drop > 49 then pfpixel 12 1 off
+   
    if drop >= 50 then AUDV0 = 0 : AUDV1 = 0    
    if drop >= 50 then Bit0_NewLevel{0}=1: delay = 0: goto __titlepage
    frame=frame+1    
@@ -334,7 +325,7 @@ __Player1Move
    if player1y >= 164 then goto __Player1SideMove      
    if player1x < 10 then player1x =10
    if player1x > 148 then player1x =148 
-   if player1y < 50  && player1y >= player4y -30 && player1y <= player4y+30 then goto __Player3Move :Moverate=Moverate-1
+   ;if player1y < 50  && player1y >= player4y -30 && player1y <= player4y+30 then goto __Player3Move :Moverate=Moverate-1
    ;if player1y < 20  && player1y >= player2y -30 && player1y <= player2y+30 then goto __Player3Move :Moverate=Moverate-1    
    if Moverate < 8 then goto __CheckCollision 
    if EnemyHit = 1 then goto __Player2Move
@@ -351,7 +342,7 @@ __Player1SideMove
    
 __Player2Move
    if drop >= 48 && player2y = 200 then goto __Player3Move
-   if player2y >170 && EnemyHit <> 2 then player2y = (rand&5)+5: player2x = (rand+20)/2: drop = drop +1
+   if player2y >170 && EnemyHit <> 2 then player2y = (rand&5): player2x = (rand+20)/2 + player1x/2: drop = drop +1
    if player2x < 15 then player2x = 15
    if player2x > 148 then player2x = 148  
    if player2y < 50  && player2y >= player4y -30 && player2y <= player4y+30 then goto __Player3Move 
@@ -360,14 +351,21 @@ __Player2Move
 __SkipP2drop
    if EnemyHit = 2 then goto __Player3Move
    if Moverate < 8 then goto __CheckCollision
+   if level > 2 && player2y > 130 then goto __PlayerSideSweep
    player2y = player2y + EnemySpeed 
+   goto __Player3Move
+
+__PlayerSideSweep
+   player2y =130
+   if player2x > REdge then player2x = player2x - EnemySpeed
+   if player2x < LEdge then player2x = player2x + EnemySpeed
 
 __Player3Move    
       
 __SkipP3drop
    if Moverate < 5 then goto __CheckCollision 
    if player3y > 120 then  __Player3Xset
-   if level > 2 && player3x > LEdge && player3x < REdge then player3y = player3y + 3: goto __SkipHMove
+   if level > 1 && player3x > LEdge && player3x < REdge then player3y = player3y + 3: goto __SkipHMove
    if EnemyHit = 3 then goto __SkipHMove
    if Bit6_PLayer3Direction{6} then goto __Player3xMove
 
@@ -2718,8 +2716,11 @@ __P0Exp_Skip_Ch_1
    
 __Titlesceen 
    drop=0
+   
    asm
-   include "titlescreen/asm/titlescreen.asm"
+    include "titlescreen/asm/titlescreen.asm" 
 end
-return   
+   return 
+
+
    

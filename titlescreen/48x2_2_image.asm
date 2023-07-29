@@ -1,12 +1,12 @@
 
 
  ;*** The height of the displayed data...
-bmp_48x2_2_window = 15
+bmp_48x2_2_window = 10
 
  ;*** The height of the bitmap data. This can be larger than 
  ;*** the displayed data height, if you're scrolling or animating 
  ;*** the data...
-bmp_48x2_2_height = 15
+bmp_48x2_2_height = 10
 
    if >. != >[.+(bmp_48x2_2_height)]
       align 256

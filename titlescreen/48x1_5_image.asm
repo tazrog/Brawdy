@@ -34,11 +34,12 @@ bmp_48x1_5_color
 
 bmp_48x1_5_00
  ; *** replace this block with your bimap_00 data block...
-	BYTE %11101110
-	BYTE %11101010
-	BYTE %11101100
-	BYTE %11101010
-	BYTE %11101110
+	.byte %01001010 ;
+	.byte %01001010 ;
+	.byte %01001110 ;
+	.byte %01001010 ;
+	.byte %11100100 ;
+
 
 
    if >. != >[.+bmp_48x1_5_height]
@@ -48,12 +49,11 @@ bmp_48x1_5_00
 
 bmp_48x1_5_01
  ; *** replace this block with your bimap_01 data block...
-	BYTE %10001010
-	BYTE %10001010
-	BYTE %10101011
-	BYTE %11011010
-	BYTE %10001011
-
+	.byte %11101010 ;
+	.byte %10001010 ;
+	.byte %01001100 ;
+	.byte %00101010 ;
+	.byte %11101100 ;
 
    if >. != >[.+bmp_48x1_5_height]
 	align 256
@@ -62,11 +62,12 @@ bmp_48x1_5_01
 
 bmp_48x1_5_02
  ; *** replace this block with your bimap_02 data block...
-	BYTE %01110001
-	BYTE %00000001
-	BYTE %10000111
-	BYTE %10000101
-	BYTE %10000101
+	.byte %11101110 ;
+	.byte %10101010 ;
+	.byte %10101010 ;
+	.byte %10101000 ;
+	.byte %11101110 ;
+
 
 
    if >. != >[.+bmp_48x1_5_height]
@@ -76,11 +77,11 @@ bmp_48x1_5_02
 
 bmp_48x1_5_03
  ; *** replace this block with your bimap_03 data block...
-	BYTE %01110000
-	BYTE %01010101
-	BYTE %01110010
-	BYTE %01010101
-	BYTE %01110000
+	.byte %00001110 ;
+	.byte %00001010 ;
+	.byte %00001010 ;
+	.byte %00001000 ;
+	.byte %00001110 ;
 
 
    if >. != >[.+bmp_48x1_5_height]
@@ -90,12 +91,11 @@ bmp_48x1_5_03
 
 bmp_48x1_5_04
  ; *** replace this block with your bimap_04 data block...
-	BYTE %01110111
-	BYTE %00100000
-	BYTE %00100000
-	BYTE %00100000
-	BYTE %01100000
-
+	.byte %10101010 ;
+	.byte %10101010 ;
+	.byte %11101010 ;
+	.byte %10101110 ;
+	.byte %11101010 ;
 
    if >. != >[.+bmp_48x1_5_height]
 	align 256
@@ -104,11 +104,10 @@ bmp_48x1_5_04
 
 bmp_48x1_5_05
  ; *** replace this block with your bimap_05 data block...
-	BYTE %01100111
-	BYTE %00010111
-	BYTE %01100111
-	BYTE %01000111
-	BYTE %01110111
-
+	.byte %11101110 ;
+	.byte %10000010 ;
+	.byte %11001110 ;
+	.byte %10001000 ;
+	.byte %11101110 ;
 
 
