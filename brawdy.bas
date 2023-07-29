@@ -158,10 +158,9 @@ __Variables
    const _P_Edge_Bottom = 160
    const _P_Edge_Left = 0
    const _P_Edge_Right = 150    
-   ;const splitscore_2_4 = 0
-   ;const SPLIT_KERN_BIT = BIT_7
    const REdge =100
    const LEdge = 60
+   const pfscore = 1
    dim EnemyHit = i  
    dim drop = a
    dim Moverate =b 
@@ -192,10 +191,8 @@ __Variables
    dim PlayerDamage = m  
    dim gamenumber=u
    dim swdebounce=v   
-   dim splitKernelVar = r
    dim PlayerHealth = e
    
-   Bit0_NewLevel{0}=0
    swdebounce=0
    gamenumber=1
    level =1
@@ -253,14 +250,13 @@ __NextLevel
    frame=0   
    gosub __Playfield1 bank3
    Bit5_hit{5} =0
+  
    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Main Loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 __GameVar
    PlayerHealth = 80
-   ;ballx = 155
-   ;bally = 24
    player0x = 75
    player0y = 160
    missile0x = 200 : missile0y = 200
@@ -275,11 +271,8 @@ __GameVar
    Bit6_PLayer3Direction{6}=0
 
 __Main_Loop
-   ;ballheight = PlayerHealth
+   pfscore1 = PlayerHealth
    NUSIZ0 = $00
-   temp1 = #BIT_7
-   splitKernelVar = splitKernelVar | temp1
-   ;dec sc1= level 
    delay = delay +1   
    if delay < 60 then __Resume
    if delay > 61 then delay = 71   
