@@ -12,28 +12,27 @@
      11  0000 ????				      draw_96x2_2
      12  0000 ????				      draw_96x2_4
      13  0000 ????				      draw_96x2_5
-     14  0000 ????
-     15  0000 ????
-     16  0000 ????				      draw_gameselect
-     17  0000 ????				      draw_score
-     18  0000 ????				      ENDM
-     19  0000 ????
-     20  0000 ????						; minikernel choices are:
-     21  0000 ????						;
-     22  0000 ????						; draw_48x1_1, draw_48x1_2, draw_48x1_3
-     23  0000 ????						;	The first, second, and third 48-wide single-line bitmap minikernels
-     24  0000 ????						;
-     25  0000 ????						; draw_48x2_1, draw_48x2_2, draw_48x2_3
-     26  0000 ????						;	The first, second, and third 48-wide double-line bitmap minikernels
-     27  0000 ????						;
-     28  0000 ????						; draw_96x2_1, draw_96x2_2, draw_96x2_3
-     29  0000 ????						;	The first, second, and third 96-wide double-line bitmap minikernels
-     30  0000 ????						;
-     31  0000 ????						; draw_gameselect
-     32  0000 ????						;	The game selection display minikernel
-     33  0000 ????						;
-     34  0000 ????						; draw_score
-     35  0000 ????						;	A minikernel that draws the score
-     36  0000 ????						;
-     37  0000 ????						; draw_space 10
-     38  0000 ????						;	A minikernel used to add blank space between other minikernels
+     14  0000 ????				      draw_space	2
+     15  0000 ????				      draw_gameselect
+     16  0000 ????				      draw_score
+     17  0000 ????				      ENDM
+     18  0000 ????
+     19  0000 ????						; minikernel choices are:
+     20  0000 ????						;
+     21  0000 ????						; draw_48x1_1, draw_48x1_2, draw_48x1_3
+     22  0000 ????						;	The first, second, and third 48-wide single-line bitmap minikernels
+     23  0000 ????						;
+     24  0000 ????						; draw_48x2_1, draw_48x2_2, draw_48x2_3
+     25  0000 ????						;	The first, second, and third 48-wide double-line bitmap minikernels
+     26  0000 ????						;
+     27  0000 ????						; draw_96x2_1, draw_96x2_2, draw_96x2_3
+     28  0000 ????						;	The first, second, and third 96-wide double-line bitmap minikernels
+     29  0000 ????						;
+     30  0000 ????						; draw_gameselect
+     31  0000 ????						;	The game selection display minikernel
+     32  0000 ????						;
+     33  0000 ????						; draw_score
+     34  0000 ????						;	A minikernel that draws the score
+     35  0000 ????						;
+     36  0000 ????						; draw_space 10
+     37  0000 ????						;	A minikernel used to add blank space between other minikernels

@@ -11,6 +11,7 @@
   draw_96x2_2
   draw_96x2_4
   draw_96x2_5
+  draw_space 2
   draw_gameselect
   draw_score
  ENDM
