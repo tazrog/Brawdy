@@ -194,6 +194,8 @@ __Variables
    dim PlayerHealth = e
    dim Damage = var1
    dim Powerup = var2   
+   dim EnemyMissilerate = var3
+   dim PlayerMissileRate = var4
    swdebounce=0
    gamenumber=1
    level =1
@@ -226,7 +228,8 @@ __Gamestart
    V0 =2
    Ch0_Duration = 10
    V1 =2
-   Ch1_Duration = 10     
+   Ch1_Duration = 10 
+   EnemyMissilerate =3    
 
 __NextLevel
    gamenumber=gamenumber+1 
@@ -255,7 +258,9 @@ __NextLevel
    PlayerDamage=0
    frame=0   
    gosub __Playfield1 bank3
-   Bit5_hit{5} =0  
+   Bit5_hit{5} =0
+   EnemyMissilerate = EnemyMissilerate +1
+   if EnemyMissilerate > 5 then EnemyMissilerate =5 
    
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Main Loop
@@ -596,7 +601,7 @@ __EnemyFire
    goto __Resume
 
 __EnemyShoot   
-   if !Bit4_gameover{4} then if player3x-15 < player0x && player3x+15 > player0x then missile1x = player3x +3 : missile1y = player3y
+   if !Bit4_gameover{4} then if player3x-10 < player0x && player3x+10 > player0x then missile1x = player3x + EnemyMissilerate : missile1y = player3y
    Bit3_ShootorNot{3}=1   
    goto __Resume
 
@@ -785,28 +790,28 @@ __Colors
    _00
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
@@ -881,28 +886,28 @@ __PFColors
    _34
    _34
    _34
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
@@ -975,28 +980,28 @@ __PFColors1
    _34
    _34
    _34
+   _34
+   _34
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
@@ -1069,28 +1074,28 @@ __PFColors2
    _34
    _34
    _34
+   _34
+   _34
+   _34
+   _34
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
@@ -1168,25 +1173,25 @@ __PFColors3
    _34
    _34
    _34
+   _34
+   _34
+   _34
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
@@ -1195,7 +1200,7 @@ end
 __PFColors4
    player5x =LEdge+ 15: player5y =114 
     
-   pfcolors:
+  pfcolors:
    _C2
    _C2
    _00
@@ -1266,22 +1271,22 @@ __PFColors4
    _34
    _34
    _34
+   _34
+   _34
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
@@ -1362,19 +1367,19 @@ __PFColors5
    _34
    _34
    _34
+   _34
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
@@ -1439,37 +1444,37 @@ __PFColors6
    _00
    _00
    _00
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _F0
+   _F0
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
@@ -1532,44 +1537,44 @@ __PFColors7
    _00
    _00
    _00
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
-   _40
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
+   _34
    _F2
    _F2
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
    return
 
 __PFColors8
-   pfcolors:
+     pfcolors:
    _C2
    _C2
    _00
@@ -1649,20 +1654,21 @@ __PFColors8
    _40
    _40
    _40
+   _40
+   _F0
+   _F0
    _F2
    _F2
-   _F2
-   _F2
-   _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
+   
    return
 __PFColors9
-   pfcolors:
-  _C2
+    pfcolors:
+   _C2
    _C2
    _00
    _00
@@ -1746,15 +1752,15 @@ __PFColors9
    _40
    _40
    _F2
-   _F2
-   _F2
+   _F0
+   _F0
    _00
    _00
 end
    return
 
 __PFColors10
-   pfcolors:
+    pfcolors:
    _C2
    _C2
    _00
@@ -1867,7 +1873,7 @@ __PowerUp
    gosub __P0Explosion bank5
    
    player1y =200 
-   player2y =200 
+   player2y =200
    player3y = 200
    player4y=200
    Bit2_EnemyMove{2}=0
@@ -2547,8 +2553,22 @@ end
 __GameOver
    
    Bit4_gameover{4} = 1
+   ;Househit =1
    missile0y =200: missile1y=200  
-   player0y =200: player1y=200: player2y=200: player3y=200: player4y=200: player5y=200: player6y=200: player7y =200
+   player0y =200 
+   player1y=200 
+   player2y=200
+   player3y=200 
+   player4y=200 
+   player5y=200
+   player6y=200 
+   player7y =200
+   player1x =20 : player1y = 40
+   player2x =20 : player2y = 70
+   player3x =20 : player3y = 100
+   Powerup =0
+   player4x=150 : player4y =120
+     
    if Bit4_gameover{4} then if !Ch0_Sound then Ch0_Sound = 1 : Ch0_Duration = 30 
    if !Ch0_Sound then goto __End__Skip_Ch_0  
    Ch0_Duration = Ch0_Duration - 1  
@@ -2654,7 +2674,6 @@ __End__Skip_Ch_0
    ................................
 end
 
-
    pfcolors:
    _00
    _00
@@ -2745,98 +2764,7 @@ end
    _00
    _00
 end
-
-   bkcolors:
-   _0E
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-   _42
-end   
-   
+     
    if joy0fire || switchreset then goto __Gamestart bank2
    return
 
