@@ -190,13 +190,12 @@ __Variables
    dim Bit0_NewLevel = z
    dim PlayerDamage = m  
    dim gamenumber=u
-   dim swdebounce=v   
+   ;dim swdebounce=v   
    dim PlayerHealth = e
    dim Damage = var1
    dim Powerup = var2   
    dim EnemyMissilerate = var3
-   dim PlayerMissileRate = var4
-   swdebounce=0
+   dim PlayerMissileRate = var4   
    gamenumber=1
    level =1
 
@@ -205,8 +204,7 @@ __titlepage
    gosub __Titlesceen bank6  
    if Bit0_NewLevel{0} && delay < 60 then __TitleDelay       
    if joy0fire || switchreset then goto __Gamestart
-   ;if !switchselect then swdebounce=0
-   ;if swdebounce>0  then swdebounce=swdebounce-1: goto __titlepage     
+       
 
 __TitleDelay
    goto __titlepage 
