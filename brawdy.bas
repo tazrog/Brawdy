@@ -190,12 +190,13 @@ __Variables
    dim Bit0_NewLevel = z
    dim PlayerDamage = m  
    dim gamenumber=u
-   ;dim swdebounce=v   
+   dim swdebounce=v   
    dim PlayerHealth = e
    dim Damage = var1
    dim Powerup = var2   
    dim EnemyMissilerate = var3
-   dim PlayerMissileRate = var4   
+   dim PlayerMissileRate = var4
+   swdebounce=0
    gamenumber=1
    level =1
 
@@ -204,7 +205,8 @@ __titlepage
    gosub __Titlesceen bank6  
    if Bit0_NewLevel{0} && delay < 60 then __TitleDelay       
    if joy0fire || switchreset then goto __Gamestart
-       
+   ;if !switchselect then swdebounce=0
+   ;if swdebounce>0  then swdebounce=swdebounce-1: goto __titlepage     
 
 __TitleDelay
    goto __titlepage 
@@ -241,15 +243,15 @@ __NextLevel
    Ch0_Counter=0: Ch0_Duration=0: Ch0_Sound=0
    Ch1_Counter=0: Ch1_Sound=0: Ch1_Duration=0
    delay = 0
-   player5x =200: player5y =200
-   player6x =200: player6y =200 
-   player7x =200: player7y =200 
-   player1y = 25: player1x = rand
-   player2y = 10: player2x = rand
+   player5x =200 : player5y =200
+   player6x =200 : player6y =200 
+   player7x =200 : player7y =200 
+   player1y = 25 : player1x = (rand&150)
+   player2y = 10 : player2x = (rand&150)
    if LEdge <= 80 then player3y = 15: player3x =150
    if LEdge > 80 then player3y = 15: player3x =15
    player4y =200
-   dec level=level+1
+   level=level+$1
    Bit1_missleOn{1} = 0
    Househit=1  
    Bit2_EnemyMove{2}=0    
@@ -274,122 +276,64 @@ __GameVar
    missile1height = 8    
    Bit1_missleOn{1}=0   
    drop =0   
-   ;dim sc1 = score  
    CTRLPF=$21
    EnemyHit = 0
    Bit6_PLayer3Direction{6}=0
 
-__Main_Loop
-   bkcolors:
-   _08
-   _06
-   _08
-   _08
-   _06
-   _08
-   _06
-   _08
-   _06
-   _06
-   _08
-   _08
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _06
-   _C6
-   _C6
-end  
+__Main_Loop  
 
-   gosub __GameSettings bank5
-
+__GameSettings
+   ;NUSIZ0 = $00
+   delay = delay +1   
+   if delay < 60 then __Resume bank2
+   if delay > 61 then delay = 71   
+   if switchreset goto __Reset
+   if Bit4_gameover{4} then goto __SkipMove bank2
+   if PlayerHealth <=0 then Bit4_gameover{4} =1   
+   if Bit4_gameover{4} then gosub __GameOver bank4      
+   if Househit>1 then gosub __Househits bank3   
+   if Househit>12 then gosub __GameOver bank4 
+   if EnemyHit > 0 then Bit1_missleOn{1} = 0: missile0y=200
+   if PlayerHealth> 0 then pfscore2 =%00000001
+   if PlayerHealth> 10 then pfscore2 =%00000011
+   if PlayerHealth> 20 then pfscore2 =%00000111
+   if PlayerHealth> 30 then pfscore2 =%00001111
+   if PlayerHealth> 40 then pfscore2 =%00011111
+   if PlayerHealth> 50 then pfscore2 =%00111111
+   if PlayerHealth> 60 then pfscore2 =%01111111
+   if PlayerHealth> 70 then pfscore2 = %11111111  
+   if drop >= 45 then pfscore1 = %00000001
+   if drop <= 45 then pfscore1 = %00000011
+   if drop <= 40 then pfscore1 = %00000111
+   if drop <= 35 then pfscore1 = %00001111
+   if drop <= 30 then pfscore1 = %00011111
+   if drop <= 20 then pfscore1 = %00111111
+   if drop <= 10 then pfscore1 = %01111111
+   if drop < 10 then pfscore1 = %11111111
+   if PlayerHealth < 20 then pfscorecolor = $32
+   if PlayerHealth > 20 then pfscorecolor =$00   
+   if drop >= 50 then AUDV0 = 0 : AUDV1 = 0    
+   if drop >= 50 then Bit0_NewLevel{0}=1: delay = 0: goto __titlepage bank2
+   frame=frame+1    
+   gosub __FrameAnimation bank4  
   
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;;  Player and Enemy Movement and placement
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 __Movement   
    Moverate=Moverate +1   
    
 __HealthDrop
-   if HealthDrop > 4 && !Bit2_EnemyMove{2} then if player4y > 190 then player4y = 5:player4x = (rand+44)/2 + player1x/2 : Bit2_EnemyMove{2}=1
-   if player4x > player1x - 5 && player4x < player1x + 5 then player4x = (rand&150)
-   if player4x > player2x - 5 && player4x < player2x + 5 then player4x = (rand&150)
+   if HealthDrop > 4 && !Bit2_EnemyMove{2} then if player4y > 190 then player4y = 5 : player4x = (rand&150) : Bit2_EnemyMove{2}=1
+   if player4y > player1y - 5 && player4y < player1y + 5 then goto __Player1Move
+   if player4y > player2y - 5 && player4y < player2y + 5 then goto __Player1Move
    if HealthDrop > 4 && player4y >190 then Bit2_EnemyMove{2}=0
    if Bit2_EnemyMove{2} && player4y>170 then HealthDrop=0: Bit2_EnemyMove{2}=0 : player4y = 200:
    if player4x < 5 then player4x=5
    if player4x > 150 then player4x =150
    if Moverate < 7 then goto __Player1Move
-   scorecolor=scorecolor+1
+   
    if Bit2_EnemyMove{2} then player4y = player4y +2 : HealthDrop = 0
 
 __Player1Move
@@ -445,8 +389,8 @@ __SkipP3drop
 __Player3Xset
    if (rand&1) >0 then Bit7_PLayer3Moving{7} =1 else Bit7_PLayer3Moving{7} =0 
    if drop > 49 then goto __Player3Reset
-   if Bit7_PLayer3Moving{7} then player3y =(rand&15) + (level*2)+5 : player3x = 150 : drop = drop +1
-   if !Bit7_PLayer3Moving{7} then player3y =(rand&15) + (level*2)+5 : player3x = 4 : drop = drop +1 
+   if Bit7_PLayer3Moving{7} then player3y =(rand&20) + 20 : player3x = 150 : drop = drop +1
+   if !Bit7_PLayer3Moving{7} then player3y =(rand&20) + 20 : player3x = 4 : drop = drop +1 
    if player3y > 100 then player3y =80
    Bit6_PLayer3Direction{6} =1  
 
@@ -455,8 +399,8 @@ __Player3xMove
    if Bit7_PLayer3Moving{7} && player3y >= player1y -5 && player3y <= player1y+5 && player3x <= player1x +20  then goto __Player3Reset 
    if !Bit7_PLayer3Moving{7} && player3y >= player2y -5 && player3y <= player2y+5 && player3x >= player2x -20  then goto __Player3Reset 
    if Bit7_PLayer3Moving{7} && player3y >= player2y -5 && player3y <= player2y+5 && player3x <= player2x +20  then goto __Player3Reset 
-   if !Bit7_PLayer3Moving{7} &&  player3y >= player4y -5 && player3y <= player4y+5 && player3x >= player4x -20 then __Player3Reset
-   if Bit7_PLayer3Moving{7} && player3y >= player4y -5 && player3y <= player4y+5 && player3x <= player4x +20 then __Player3Reset
+   if !Bit7_PLayer3Moving{7} &&  player3y >= player4y -5 && player3y <= player4y+5 && player3x >= player4x -20 then goto __Player3Reset
+   if Bit7_PLayer3Moving{7} && player3y >= player4y -5 && player3y <= player4y+5 && player3x <= player4x +20 then goto __Player3Reset
    if !Bit7_PLayer3Moving{7} then player3x = player3x + EnemySpeed    
    if Bit7_PLayer3Moving{7} then player3x = player3x - EnemySpeed 
 
@@ -483,7 +427,7 @@ __CheckCollision
        
 __EnemyCollision    
    if !collision(player0,player1) then goto __Skip_p0_Collision
-   temp5 = 16
+   temp5 = 15
    if EnemyHit <> 1 then if (player0y + 10) >= player1y && player0y <= (player1y + 10) && (player0x + temp5) >= player1x && player0x <= (player1x + 7) then EnemyHit = 1  : Damage =20: goto __EnemyBlock 
    if EnemyHit <> 2 then if (player0y + 10) >= player2y && player0y <= (player2y + 10) && (player0x + temp5) >= player2x && player0x <= (player2x + 7) then  EnemyHit = 2:  Damage =10 : goto __EnemyBlock 
    if EnemyHit <> 3 then if (player0y + 10) >= player3y && player0y <= (player3y + 10) && (player0x + temp5) >= player3x && player0x <= (player3x + 7) then EnemyHit = 3 :  Damage =10 : goto __EnemyBlock 
@@ -501,11 +445,8 @@ __Skip_p0_Collision
    
 __Skip_PF_Collision         
   
-__SkipMove    
+__SkipMove      
    
-   
-   ;if !Bit4_gameover && joy0fire then goto __Gamestart
-
    DF6FRACINC = 255 ; Background colors.
    DF4FRACINC = 255 ; Playfield colors.
    DF0FRACINC = 128 ; Column 0.
@@ -514,10 +455,9 @@ __SkipMove
    DF3FRACINC = 128 ; Column 3.
 
 __JoystickControls 
-   AUDV1 = 0: AUDC1 = 0: AUDF1 = 0
    if joy0left && player0x > _P_Edge_Left then player0x = player0x - 1 
    if joy0right && player0x < _P_Edge_Right then player0x = player0x + 1    
-
+ 
 __FireSound  
    
    if joy0fire && !Bit4_gameover{4} then if !Ch0_Sound  && !Bit1_missleOn{1} then Ch0_Sound = 1 : Ch0_Duration = 15 
@@ -574,7 +514,7 @@ __EnemyFire
    if level <=5 then if !Bit4_gameover{4} then if Bit3_ShootorNot{3} then missile1y = missile1y + 3   
    if level >5 then if !Bit4_gameover{4} then if Bit3_ShootorNot{3} then missile1y = missile1y + 5
    if missile1y > 170 then missile1y=200: Bit3_ShootorNot{3}=0
-   if missile1y = player0y then if  missile1x > player0x -8 && missile1x < player0x +8 then Damage =5 : PlayerDamage =0 : goto __EnemyScore
+   if missile1y > player0y-8 && missile1y < player0y+1 then if  missile1x > player0x -8 && missile1x < player0x +8 then Damage =5 : PlayerDamage =0 : goto __EnemyScore
    goto __Resume
 
 __EnemyShoot   
@@ -605,6 +545,19 @@ __Resume
    temp1=temp1
 __Bank3
 
+__Househits
+   if Househit=2 then gosub __PFColors bank3
+   if Househit=3 then gosub __PFColors1 bank3
+   if Househit=4 then gosub __PFColors2 bank3
+   if Househit=5 then gosub __PFColors3 bank3
+   if Househit=6 then gosub __PFColors4 bank3
+   if Househit=7 then gosub __PFColors5 bank3
+   if Househit=8 then gosub __PFColors6 bank3
+   if Househit=9 then gosub __PFColors7 bank3
+   if Househit=10 then gosub __PFColors8 bank3
+   if Househit=11 then gosub __PFColors9 bank3
+   if Househit=12 then gosub __PFColors10 bank3
+   return
 __Playfield1
  
  if Bit4_gameover{4} then goto __GameOver bank4
@@ -1972,6 +1925,97 @@ end
    temp1=temp1
 
 __FrameAnimation
+
+ bkcolors:
+   _08
+   _06
+   _08
+   _08
+   _06
+   _08
+   _06
+   _08
+   _06
+   _06
+   _08
+   _08
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _06
+   _C6
+   _C6
+end  
 __p0Frames
    if !Bit1_missleOn{1} then if joy0fire then goto __p0Fire
    if joy0left then goto __P0BlockLeft
@@ -2669,7 +2713,7 @@ __End__Skip_Ch_0
    ....XXXXX..X...X...XXXX..XXXX...
    ....X...X..X...X...XXXX..XXXX...
    ....X...X..X...X...X.....X..X...
-   .>..X...X..X...X...X.....X..X...
+   ....X...X..X...X...X.....X..X...
    ....X...X..X...X...X.....X..X...
    ....X...X..X...X...X.....X..X...
    ....X...X...X.XX...X.....X..X...
@@ -2804,51 +2848,6 @@ end
 
    bank 5
    temp1=temp1
-__GameSettings
-   NUSIZ0 = $00
-   delay = delay +1   
-   if delay < 60 then __Resume bank2
-   if delay > 61 then delay = 71   
-   if switchreset goto __Reset
-   if Bit4_gameover{4} then goto __SkipMove bank2
-   if PlayerHealth <=0 then Bit4_gameover{4} =1   
-   if Bit4_gameover{4} then gosub __GameOver bank4      
-   if Househit=2 then gosub __PFColors bank3
-   if Househit=3 then gosub __PFColors1 bank3
-   if Househit=4 then gosub __PFColors2 bank3
-   if Househit=5 then gosub __PFColors3 bank3
-   if Househit=6 then gosub __PFColors4 bank3
-   if Househit=7 then gosub __PFColors5 bank3
-   if Househit=8 then gosub __PFColors6 bank3
-   if Househit=9 then gosub __PFColors7 bank3
-   if Househit=10 then gosub __PFColors8 bank3
-   if Househit=11 then gosub __PFColors9 bank3
-   if Househit=12 then gosub __PFColors10 bank3
-   if Househit>12 then gosub __GameOver bank4 
-   if EnemyHit > 0 then Bit1_missleOn{1} = 0: missile0y=200
-   if PlayerHealth> 0 then pfscore2 =%00000001
-   if PlayerHealth> 10 then pfscore2 =%00000011
-   if PlayerHealth> 20 then pfscore2 =%00000111
-   if PlayerHealth> 30 then pfscore2 =%00001111
-   if PlayerHealth> 40 then pfscore2 =%00011111
-   if PlayerHealth> 50 then pfscore2 =%00111111
-   if PlayerHealth> 60 then pfscore2 =%01111111
-   if PlayerHealth> 70 then pfscore2 = %11111111  
-   if drop >= 45 then pfscore1 = %00000001
-   if drop <= 45 then pfscore1 = %00000011
-   if drop <= 40 then pfscore1 = %00000111
-   if drop <= 35 then pfscore1 = %00001111
-   if drop <= 30 then pfscore1 = %00011111
-   if drop <= 20 then pfscore1 = %00111111
-   if drop <= 10 then pfscore1 = %01111111
-   if drop < 10 then pfscore1 = %11111111
-   if PlayerHealth < 20 then pfscorecolor = $32
-   if PlayerHealth > 20 then pfscorecolor =$00   
-   if drop >= 50 then AUDV0 = 0 : AUDV1 = 0    
-   if drop >= 50 then Bit0_NewLevel{0}=1: delay = 0: goto __titlepage bank2
-   frame=frame+1    
-   gosub __FrameAnimation bank4
-   return
 
 
 __P0Explosion
