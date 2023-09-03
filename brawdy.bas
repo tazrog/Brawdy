@@ -196,6 +196,9 @@ __Variables
    dim Powerup = var2   
    dim EnemyMissilerate = var3
    dim PlayerMissileRate = var4
+   dim Bit0_HitPlayer = var5
+   dim Bit1_EnemyShootSound = var5
+   dim Bit2_HealthHitSound = var5
    swdebounce=0
    gamenumber=1
    level =1
@@ -267,7 +270,7 @@ __NextLevel
 ; Main Loop
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 __GameVar
-   PlayerHealth = 80
+   ;PlayerHealth = 80
    player0x = 75
    player0y = 160
    missile0x = 200 : missile0y = 200
@@ -279,6 +282,9 @@ __GameVar
    CTRLPF=$21
    EnemyHit = 0
    Bit6_PLayer3Direction{6}=0
+   Bit0_HitPlayer{0}=0
+   Bit1_EnemyShootSound{1} =0
+   Bit2_HealthHitSound = 0
 
 __Main_Loop  
 
@@ -289,11 +295,14 @@ __GameSettings
    if delay > 61 then delay = 71   
    if switchreset goto __Reset
    if Bit4_gameover{4} then goto __SkipMove bank2
-   if PlayerHealth <=0 then Bit4_gameover{4} =1   
+   if PlayerHealth <=0 then Bit4_gameover{4} =1  
+   if PlayerHealth >80 then Bit4_gameover{4} =1  
    if Bit4_gameover{4} then gosub __GameOver bank4      
    if Househit>1 then gosub __Househits bank3   
    if Househit>12 then gosub __GameOver bank4 
    if EnemyHit > 0 then Bit1_missleOn{1} = 0: missile0y=200
+   if PlayerHealth> 80 then pfscore2 =%00000000
+   if PlayerHealth= 0 then pfscore2 =%00000000
    if PlayerHealth> 0 then pfscore2 =%00000001
    if PlayerHealth> 10 then pfscore2 =%00000011
    if PlayerHealth> 20 then pfscore2 =%00000111
@@ -374,8 +383,8 @@ __SkipP2drop
 __PlayerSideSweep
    player2y =130 
    if Moverate < 8 then goto __CheckCollision
-   if player2x > REdge then player2x = player2x - (level -3)
-   if player2x < LEdge then player2x = player2x + (level -3)
+   if player2x > REdge then player2x = player2x - (level -2)
+   if player2x < LEdge then player2x = player2x + (level -2 )
 
 __Player3Move    
       
@@ -420,16 +429,16 @@ __EnemyMove
 __CheckCollision
    if EnemyHit >0 then __EnemyCollision
    if !collision(player1,playfield) then goto __EnemyCollision
-   if (temp4 + 5) >= player1y && temp4 <= (player1y + 5) then player1y=200 : Househit=Househit+1 : Bit5_hit{5} =1 : goto __Explosion 
-   if (temp4 + 5) >= player2y && temp4 <= (player2y + 5) then player2y=200 : Househit=Househit+1 : Bit5_hit{5} =1 : goto __Explosion 
-   if (temp4 + 5) >= player3y && temp4 <= (player3y + 5) then player3y=200 : Bit6_PLayer3Direction{6} = 0 : Househit=Househit+1 : Bit5_hit{5} =1 : goto __Explosion 
+   if (temp4 + 5) >= player1y && temp4 <= (player1y + 5) then player1y=200 : Househit=Househit+1 : Bit0_HitPlayer =1 : Bit5_hit{5} =1 : goto __Explosion 
+   if (temp4 + 5) >= player2y && temp4 <= (player2y + 5) then player2y=200 : Househit=Househit+1 : Bit0_HitPlayer =1 : Bit5_hit{5} =1 : goto __Explosion 
+   if (temp4 + 5) >= player3y && temp4 <= (player3y + 5) then player3y=200 : Bit6_PLayer3Direction{6} = 0 : Househit=Househit+1 : Bit0_HitPlayer =1 : Bit5_hit{5} =1 : goto __Explosion 
    if (temp4 + 5) >= player4y && temp4 <= (player4y + 5) then player4y=200 : HealthDrop=0: Bit2_EnemyMove{2}=0 : if Powerup <1 then Househit=Househit+3
        
 __EnemyCollision    
    if !collision(player0,player1) then goto __Skip_p0_Collision
    temp5 = 15
-   if EnemyHit <> 1 then if (player0y + 10) >= player1y && player0y <= (player1y + 10) && (player0x + temp5) >= player1x && player0x <= (player1x + 7) then EnemyHit = 1  : Damage =20: goto __EnemyBlock 
-   if EnemyHit <> 2 then if (player0y + 10) >= player2y && player0y <= (player2y + 10) && (player0x + temp5) >= player2x && player0x <= (player2x + 7) then  EnemyHit = 2:  Damage =10 : goto __EnemyBlock 
+   if EnemyHit <> 1 then if (player0y + 10) >= player1y && player0y <= (player1y + 10) && (player0x + temp5) >= player1x && player0x <= (player1x + 7) then EnemyHit = 1 : Damage =20 : goto __EnemyBlock 
+   if EnemyHit <> 2 then if (player0y + 10) >= player2y && player0y <= (player2y + 10) && (player0x + temp5) >= player2x && player0x <= (player2x + 7) then  EnemyHit = 2 :  Damage =10 : goto __EnemyBlock 
    if EnemyHit <> 3 then if (player0y + 10) >= player3y && player0y <= (player3y + 10) && (player0x + temp5) >= player3x && player0x <= (player3x + 7) then EnemyHit = 3 :  Damage =10 : goto __EnemyBlock 
    if (player0y + 10) >= player4y && player0y <= (player4y + 10) && (player0x + temp5) >= player4x && player0x <= (player4x + 7) then gosub __Health bank3 
    if (player0y + 10) >= player5y && player0y <= (player5y + 10) && (player0x + temp5) >= player5x && player0x <= (player5x + 7) then goto __JoystickControls 
@@ -456,40 +465,47 @@ __SkipMove
 
 __JoystickControls 
    if joy0left && player0x > _P_Edge_Left then player0x = player0x - 1 
-   if joy0right && player0x < _P_Edge_Right then player0x = player0x + 1    
+   if joy0right && player0x < _P_Edge_Right then player0x = player0x + 1  
  
-__FireSound  
-   
-   if joy0fire && !Bit4_gameover{4} then if !Ch0_Sound  && !Bit1_missleOn{1} then Ch0_Sound = 1 : Ch0_Duration = 15 
-   if !Ch0_Sound then goto __Skip_Ch_0  
-   Ch0_Duration = Ch0_Duration - 1  
-   if !Ch0_Duration then goto __Clear_Ch_0  
-   if Ch0_Sound <> 1  then goto __Skip_Ch0_Sound_001
-   AUDC0 = 8 : AUDV0 = 2 : AUDF0 = 4   
-   if Ch0_Duration < 10 then AUDC0 = 6 : AUDV0 = 2 : AUDF0 = 12
-   if Ch0_Duration < 5 then AUDC0 = 6 : AUDV0 = 1 : AUDF0 = 14
-   goto __Skip_Ch_0
-__Skip_Ch0_Sound_001 
-   goto __Skip_Ch_0
-__Clear_Ch_0   
-   Ch0_Sound = 0 : AUDV0 = 0
-__Skip_Ch_0
-   if !Bit4_gameover{4} then if joy0fire  && !Bit1_missleOn{1} then if EnemyHit < 1 then Bit1_missleOn{1} = 1 : missile0x = player0x + 5: missile0y = player0y 
+   gosub __FireSound bank5
 
 __Explosion
    if Bit5_hit{5} && !Ch1_Sound then Ch1_Sound = 1 : Ch1_Duration = 30 
+   if Bit2_HealthHitSound{2} && !Ch1_Sound then Ch1_Sound = 1 : goto __HealthHitSound
+   if Bit0_HitPlayer{0} && !Ch1_Sound then Ch1_Sound = 1 : goto __EHit
+   
    if !Ch1_Sound then goto __Skip_Fire  
    Ch1_Duration = Ch1_Duration - 1  
    if !Ch1_Duration then goto __Exp_Clear_Ch_1  
-   if Ch1_Sound <> 1 then goto __Exp_Skip_Ch0_Sound_001
-   AUDC1 = 8 : AUDV1 = 4 : AUDF1 = 16
-   if Ch1_Duration < 20 then AUDC1 = 8 : AUDV1 = 2 : AUDF1 = 24
-   if Ch1_Duration < 10 then AUDC1 = 8 : AUDV1 = 2 : AUDF1 = 16
+   if Ch1_Sound <> 1 then goto __Exp_Skip_Ch1_Sound_001
+   if Bit2_HealthHitSound{2} && Ch1_Sound then goto __HealthHitSound
+   if !Bit0_HitPlayer{0} then goto __EHit
+   
+   AUDC1 = 8 : AUDV1 = 4 : AUDF1 = 1
+   if Ch1_Duration < 20 then AUDC1 = 8 : AUDV1 = 2 : AUDF1 = 2
+   if Ch1_Duration < 10 then AUDC1 = 8 : AUDV1 = 2 : AUDF1 = 1
+   goto  __Skip_Fire
+
+__EHit   
+   AUDC1 = 8 : AUDV1 = 4 : AUDF1 = 16 
+   if Ch1_Duration < 15 then AUDC1 = 8 : AUDV1 = 2 : AUDF1 = 24
+   if Ch1_Duration < 5 then AUDC1 = 8 : AUDV1 = 2 : AUDF1 = 16
    goto __Skip_Fire
-__Exp_Skip_Ch0_Sound_001 
+
+__HealthHitSound    
+   AUDC1 = 4 : AUDV1 = 6 : AUDF1 = 12
+   if Ch1_Duration < 8 then AUDC1 = 4 : AUDV1 = 4 : AUDF1 = 12
+   if Ch1_Duration < 3 then AUDC1 = 9 : AUDV1 = 1 : AUDF1 = 9  
+   
+   goto __Skip_Fire
+
+__Exp_Skip_Ch1_Sound_001 
    goto __Skip_Fire
 __Exp_Clear_Ch_1   
-   Ch1_Sound = 0 : AUDV1 = 0: AUDC1 = 0: AUDF1 = 0: Bit5_hit{5} =0       
+   Ch1_Sound = 0 : AUDV1 = 0: AUDC1 = 0: AUDF1 = 0
+   Bit5_hit{5} =0  
+   Bit0_HitPlayer{0}=0 
+   Bit2_HealthHitSound{2} = 0    
 
 __Skip_Fire
    if Bit1_missleOn{1} then missile0y = missile0y - PlayerMissileRate   
@@ -497,6 +513,7 @@ __Skip_Fire
    goto __EnemyFire
 
 __Score   
+   if PlayerHealth < 0 then PlayerHealth =0
    Bit5_hit{5} = 1
    if !Bit6_PLayer3Direction{6} then Points =$35
    frame = 0
@@ -506,7 +523,11 @@ __Score
    for Timer = 1 to 10
    next   
    Points=0
-   Ch1_Sound = 0 : AUDV1 = 0: AUDC1 = 0: AUDF1 = 0       
+   Ch1_Duration = 0
+   Ch1_Sound = 0 : AUDV1 = 0: AUDC1 = 0: AUDF1 = 0 
+   PlayerDamage = 1     
+   goto __Resume 
+    
 
 __EnemyFire      
    if !Bit3_ShootorNot{3} then goto __EnemyShoot 
@@ -515,11 +536,15 @@ __EnemyFire
    if level >5 then if !Bit4_gameover{4} then if Bit3_ShootorNot{3} then missile1y = missile1y + 5
    if missile1y > 170 then missile1y=200: Bit3_ShootorNot{3}=0
    if missile1y > player0y-8 && missile1y < player0y+1 then if  missile1x > player0x -8 && missile1x < player0x +8 then Damage =5 : PlayerDamage =0 : goto __EnemyScore
+   Bit1_EnemyShootSound{1} =1  
+   
+   
    goto __Resume
 
-__EnemyShoot   
-   if !Bit4_gameover{4} then if player3x-10 < player0x && player3x+10 > player0x then missile1x = player3x + EnemyMissilerate : missile1y = player3y
-   Bit3_ShootorNot{3}=1   
+__EnemyShoot 
+   
+   if !Bit4_gameover{4} then if player3x-5 < player0x && player3x+5 > player0x then missile1x = player3x + EnemyMissilerate : missile1y = player3y : Bit3_ShootorNot{3}=1
+      
    goto __Resume
 
 __EnemyBlock
@@ -528,15 +553,20 @@ __EnemyBlock
    if !joy0left || !joy0right then Points = 10 
    if joy0left || joy0right then if !joy0fire then Points = $5: PlayerDamage =2 : goto __Score    
    PlayerDamage =1
+   goto __Resume
 
 __EnemyScore   
-   if PlayerDamage < 1 then PlayerHealth = PlayerHealth - Damage
+   if PlayerDamage < 1 then dec PlayerHealth = PlayerHealth - Damage
+   if PlayerHealth < 0 then PlayerHealth =0
    PlayerDamage = 1      
    Points=0
-   missile1y =200: missile1x= 200   
-   gosub __P0Explosion bank5
-   AUDV1 = 0: AUDC1 = 0: AUDF1 = 0
-__Resume    
+   missile1y =200: missile1x= 200 
+   Bit5_hit{5}=1
+   Bit0_HitPlayer{0}=1
+   goto __Explosion
+   
+__Resume   
+   
    drawscreen
    PF0=%00000000
    goto __Main_Loop
@@ -1785,14 +1815,21 @@ end
    return
 
 __Health
+   Bit2_HealthHitSound{2} = 1
    Timer =0
    Bit5_hit{5}=1
    if Powerup < 1 then __PowerUp
-   if Powerup > 1 then __BounusFire
-   gosub __P0Explosion bank5
+   if Powerup > 1 then __BounusFire   
    PlayerHealth = PlayerHealth + 25 
-   PlayerMissileRate=5  
+   PlayerMissileRate=5
+   if PlayerHealth <= 0 then PlayerHealth = 0  
    if PlayerHealth > 80 then PlayerHealth = 80
+   player4y=200
+   missile0x = 200 : missile0y = 200 
+   Bit1_missleOn{1} =0
+   goto __Explosion bank2
+     
+   
    Househit=Househit-1
    if Househit <2 then Househit =1
    player4y=200
@@ -1800,7 +1837,8 @@ __Health
    HealthDrop = 0
    Bit1_missleOn{1} =0
    missile0x = 200 : missile0y = 200 
-   gosub __P0Explosion bank5
+   gosub __Explosion bank2
+   Bit0_HitPlayer = 1
    Powerup = (rand&2)
    return
 
@@ -1814,7 +1852,7 @@ __BounusFire
    return
 
 __PowerUp
-   gosub __P0Explosion bank5   
+   gosub __Explosion bank2   
    PlayerMissileRate=5
    player1y =200 
    player2y =200
@@ -1917,8 +1955,8 @@ __PowerUp
    _42
    _42
 end  
-   gosub __P0Explosion bank5 
-   Bit5_hit{5}=0
+   ;gosub __P0Explosion bank5 
+   ;Bit5_hit{5}=0
    return
    
    bank 4
@@ -2661,6 +2699,8 @@ __End__Skip_Ch0_Sound_001
    goto __End__Skip_Ch_0
 __End__Clear_Ch_0   
    Ch0_Sound = 0 : AUDV0 = 0: AUDC0=0: AUDF0 =0
+   Ch1_Sound = 0 : AUDV1 = 0: AUDC1 = 0: AUDF1 = 0: Bit5_hit{5} =0       
+
    
 __End__Skip_Ch_0
    playfield:
@@ -2848,24 +2888,42 @@ end
 
    bank 5
    temp1=temp1
+__Sounds
 
+__FireSound     
+   if joy0fire && !Bit4_gameover{4} then if !Ch0_Sound  && !Bit1_missleOn{1} then Ch0_Sound = 1 : Ch0_Duration = 15 
+   ;f Bit1_EnemyShootSound{1} then if !Ch0_Sound  then Ch0_Sound = 1 : Ch0_Duration = 15    
+   if !Ch0_Sound then goto __Skip_Ch_0  
+   Ch0_Duration = Ch0_Duration - 1  
+   if !Ch0_Duration then goto __Clear_Ch_0  
+   if Ch0_Sound <> 1  then goto __Skip_Ch0_Sound_001
+   AUDC0 = 8 : AUDV0 = 2 : AUDF0 = 4   
+   if Ch0_Duration < 10 then AUDC0 = 6 : AUDV0 = 2 : AUDF0 = 12
+   if Ch0_Duration < 5 then AUDC0 = 6 : AUDV0 = 1 : AUDF0 = 14
+   goto __Skip_Ch_0
+__Skip_Ch0_Sound_001 
+   goto __Skip_Ch_0
+__Clear_Ch_0   
+   Ch0_Sound = 0 : AUDV0 = 0
+__Skip_Ch_0
+   if !Bit4_gameover{4} then if joy0fire  && !Bit1_missleOn{1} then if EnemyHit < 1 then Bit1_missleOn{1} = 1 : missile0x = player0x + 5: missile0y = player0y
+   Bit1_EnemyShootSound{1} =0
+   return
 
-__P0Explosion
-   PlayerDamage  = 1
-   if Bit3_ShootorNot{3} && !Ch1_Sound then Ch1_Sound = 1 : Ch1_Duration = 25 
+__P0Explosion   
+   if !Ch1_Sound then Ch1_Sound = 1 : Ch1_Duration = 10
    if !Ch1_Sound then goto __P0Exp_Skip_Ch_1  
    Ch1_Duration = Ch1_Duration - 1  
-   if !Ch1_Duration then goto __P0Exp_Clear_Ch_1  
-   if Ch1_Sound <> 1 then goto __P0Exp_Skip_Ch0_Sound_001   
-   AUDC1 = 9 : AUDV1 = 6 : AUDF1 = 14
-   if Ch1_Duration < 15 then AUDC1 = 9 : AUDV1 = 4 : AUDF1 = 24
-   if Ch1_Duration < 5 then AUDC1 = 9 : AUDV1 = 1 : AUDF1 = 16         
+   if !Ch1_Duration then goto __P0Exp_Clear_Ch_1 
+   if Ch1_Sound <> 1 then goto __P0Exp_Skip_Ch_1 
+   AUDC1 = 4 : AUDV1 = 6 : AUDF1 = 12
+   if Ch1_Duration < 8 then AUDC1 = 4 : AUDV1 = 4 : AUDF1 = 12
+   if Ch1_Duration < 3 then AUDC1 = 9 : AUDV1 = 1 : AUDF1 = 9         
    goto __P0Exp_Skip_Ch_1
-__P0Exp_Skip_Ch0_Sound_001 
-   goto __P0Exp_Skip_Ch_1
-__P0Exp_Clear_Ch_1     
-__P0Exp_Skip_Ch_1
-   
+__P0Exp_Clear_Ch_1 
+   Ch1_Sound = 0 : AUDV1 = 0
+   AUDC1 = 0 : AUDV1 = 0 : AUDF1 = 0    
+__P0Exp_Skip_Ch_1     
    return
 
    bank 6
@@ -2876,7 +2934,4 @@ __Titlesceen
    asm
     include "titlescreen/asm/titlescreen.asm" 
 end
-   return 
-
-
-   
+   return
